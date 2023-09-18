@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState} from "react";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,28 +13,31 @@ import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useFormik} from 'formik';
 import {signUpSchema} from "../schemas/signUpSchema";
 
+import axios from "axios";
+import {apiAddress} from '../config'
+
 const defaultTheme = createTheme();
-
-const onSubmit = async (values, actions) => {
-    console.log(values);
-    console.log(actions);
-
-    await new Promise((resolve) => {
-        setTimeout(resolve, 1000);
-    });
-    actions.resetForm();
-};
 
 export default function SignUp() {
 
-    const [showPassword, setShowPassword] = React.useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
-    const {values, touched, handleBlur, errors, isSubmitting, handleChange, handleSubmit} = useFormik({
+    const onSubmit = async (values, actions) => {
+
+        await axios.post(`${apiAddress}/api/users`, values)
+            .then(response => response.data)
+            .then(data => checkApiErrors(data, actions))
+            .catch(console.error);
+
+    }
+
+    const {values, touched, handleBlur, errors, isSubmitting, handleChange, handleSubmit,setErrors} = useFormik({
         initialValues: {
             name: '',
             surname: '',
@@ -46,6 +49,23 @@ export default function SignUp() {
         validationSchema: signUpSchema,
         onSubmit
     });
+
+    const checkApiErrors = (data,actions) => {
+        let apiErrors = {};
+        if (data.code === 11000) { // Uniqu Errors
+            const nonUniqueKeys = Object.keys(data.keyValue);
+            nonUniqueKeys.forEach(key => apiErrors[key] = `${data.keyValue[key]} daha önceden kullanılmış.`);
+        } else if (data.errors) {   // Validator Errors
+            const nonUniqueKeys = Object.keys(data.errors);
+            nonUniqueKeys.forEach(key => apiErrors[key] = data.errors[key].message);
+        }
+        else   // Succes ( No Error )
+        {
+            actions.resetForm()
+            // TODO : Kayıt başarılı olduktan sonra profil sayfasına vs. yönlendir veya SMS,MAİL doğrulama gibi işlemler ekle.
+        }
+        setErrors(apiErrors);
+    }
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -59,8 +79,8 @@ export default function SignUp() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar  sx={{m: 1, bgcolor: 'secondary.main' , width: '75px', height:'75px'}}>
-                        <AccountCircle fontSize='large' />
+                    <Avatar sx={{m: 1, bgcolor: 'secondary.main', width: '75px', height: '75px'}}>
+                        <AccountCircle fontSize='large'/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Yeni Kullanıcı
@@ -70,9 +90,9 @@ export default function SignUp() {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     onBlur={handleBlur}
+                                    helperText={touched.name && errors.name}
                                     error={Boolean(errors.name) && touched.name}
                                     value={values.name}
-                                    helperText={touched.name && errors.name}
                                     name="name"
                                     onChange={handleChange}
                                     autoComplete="given-name"
@@ -86,9 +106,9 @@ export default function SignUp() {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     onBlur={handleBlur}
+                                    helperText={touched.surname && errors.surname}
                                     error={Boolean(errors.surname) && touched.surname}
                                     value={values.surname}
-                                    helperText={touched.surname && errors.surname}
                                     name="surname"
                                     onChange={handleChange}
                                     required
@@ -101,9 +121,9 @@ export default function SignUp() {
                             <Grid item xs={12}>
                                 <TextField
                                     onBlur={handleBlur}
+                                    helperText={touched.email && errors.email}
                                     error={Boolean(errors.email) && touched.email}
                                     value={values.email}
-                                    helperText={touched.email && errors.email}
                                     name="email"
                                     onChange={handleChange}
                                     required
@@ -116,9 +136,9 @@ export default function SignUp() {
                             <Grid item xs={12}>
                                 <TextField
                                     onBlur={handleBlur}
+                                    helperText={touched.phone && errors.phone}
                                     error={Boolean(errors.phone) && touched.phone}
                                     value={values.phone}
-                                    helperText={touched.phone && errors.phone}
                                     name="phone"
                                     onChange={handleChange}
                                     fullWidth
@@ -133,9 +153,9 @@ export default function SignUp() {
                             <Grid item xs={12}>
                                 <TextField
                                     onBlur={handleBlur}
+                                    helperText={touched.password && errors.password}
                                     error={Boolean(errors.password) && touched.password}
                                     value={values.password}
-                                    helperText={touched.password && errors.password}
                                     name="password"
                                     onChange={handleChange}
                                     required
@@ -148,11 +168,12 @@ export default function SignUp() {
                                     InputProps={{
                                         endAdornment: <InputAdornment position="end">
                                             <IconButton
+                                                tabIndex={-1}
                                                 aria-label="toggle password visibility"
-                                                onClick={()=>setShowPassword(true)}
-                                                onMouseDown={()=>setShowPassword(false)}
+                                                onClick={() => setShowPassword(true)}
+                                                onMouseDown={() => setShowPassword(false)}
                                             >
-                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                {showPassword ? <VisibilityOff/> : <Visibility/>}
                                             </IconButton>
                                         </InputAdornment>
                                     }}
@@ -161,9 +182,9 @@ export default function SignUp() {
                             <Grid item xs={12}>
                                 <TextField
                                     onBlur={handleBlur}
+                                    helperText={touched.confirmPassword && errors.confirmPassword}
                                     error={Boolean(errors.confirmPassword) && touched.confirmPassword}
                                     value={values.confirmPassword}
-                                    helperText={touched.confirmPassword && errors.confirmPassword}
                                     name="confirmPassword"
                                     onChange={handleChange}
                                     required
@@ -176,11 +197,12 @@ export default function SignUp() {
                                     InputProps={{
                                         endAdornment: <InputAdornment position="end">
                                             <IconButton
+                                                tabIndex={-1}
                                                 aria-label="toggle password visibility"
-                                                onClick={()=>setShowPassword(true)}
-                                                onMouseDown={()=>setShowPassword(false)}
+                                                onClick={() => setShowPassword(true)}
+                                                onMouseDown={() => setShowPassword(false)}
                                             >
-                                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                                                {showPassword ? <VisibilityOff/> : <Visibility/>}
                                             </IconButton>
                                         </InputAdornment>
                                     }}
@@ -194,7 +216,7 @@ export default function SignUp() {
                             variant="contained"
                             sx={{mt: 3, mb: 2}}
                         >
-                            Hesap Oluştur
+                            {isSubmitting ? <CircularProgress color="inherit"/> : <>Hesap Oluştur</>}
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
