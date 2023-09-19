@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 import {localStorageTokenName} from "../../config";
 import {decodeToken, isExpired} from "react-jwt";
 
-const token = localStorage.getItem(localStorageTokenName);
+const token = localStorage.getItem(localStorageTokenName) || '';
 
 const courseSlice = createSlice({
     name: 'account',
