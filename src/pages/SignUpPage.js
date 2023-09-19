@@ -30,14 +30,14 @@ export default function SignUp() {
 
     const onSubmit = async (values, actions) => {
 
-        await axios.post(`${apiAddress}/api/users`, values)
+        await axios.post(`${apiAddress}/sign-up`, values)
             .then(response => response.data)
             .then(data => checkApiErrors(data, actions))
             .catch(console.error);
 
     }
 
-    const {values, touched, handleBlur, errors, isSubmitting, handleChange, handleSubmit,setErrors} = useFormik({
+    const {values, touched, handleBlur, errors, isSubmitting, handleChange, handleSubmit, setErrors} = useFormik({
         initialValues: {
             name: '',
             surname: '',
@@ -50,7 +50,7 @@ export default function SignUp() {
         onSubmit
     });
 
-    const checkApiErrors = (data,actions) => {
+    const checkApiErrors = (data, actions) => {
         let apiErrors = {};
         if (data.code === 11000) { // Uniqu Errors
             const nonUniqueKeys = Object.keys(data.keyValue);
@@ -58,8 +58,7 @@ export default function SignUp() {
         } else if (data.errors) {   // Validator Errors
             const nonUniqueKeys = Object.keys(data.errors);
             nonUniqueKeys.forEach(key => apiErrors[key] = data.errors[key].message);
-        }
-        else   // Succes ( No Error )
+        } else   // Succes ( No Error )
         {
             actions.resetForm()
             // TODO : Kayıt başarılı olduktan sonra profil sayfasına vs. yönlendir veya SMS,MAİL doğrulama gibi işlemler ekle.
@@ -79,8 +78,8 @@ export default function SignUp() {
                         alignItems: 'center',
                     }}
                 >
-                    <Avatar sx={{m: 1, bgcolor: 'secondary.main', width: '75px', height: '75px'}}>
-                        <AccountCircle fontSize='large'/>
+                    <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                        <AccountCircle/>
                     </Avatar>
                     <Typography component="h1" variant="h5">
                         Yeni Kullanıcı
@@ -209,6 +208,7 @@ export default function SignUp() {
                                 />
                             </Grid>
                         </Grid>
+                        {/* TODO : Buraya google recaptha(robot sorgusu) ekle*/}
                         <Button
                             disabled={isSubmitting}
                             type="submit"
@@ -220,7 +220,7 @@ export default function SignUp() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link href="/login" variant="body2">
                                     Zaten hesabınız var mı? Giriş Yapın. {/*TODO : Bu linki yönlendirmeyi unutma.*/}
                                 </Link>
                             </Grid>
