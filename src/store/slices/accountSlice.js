@@ -1,10 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {localStorageTokenName} from "../../config";
+import {apiAddress, localStorageTokenName} from "../../config";
 import {decodeToken, isExpired} from "react-jwt";
+import axios from "axios";
 
 const token = localStorage.getItem(localStorageTokenName) || '';
 
-const courseSlice = createSlice({
+const accountSlice = createSlice({
     name: 'account',
     initialState: {
         token: {
@@ -20,12 +21,22 @@ const courseSlice = createSlice({
             localStorage.setItem(localStorageTokenName, token);
         },
 
-        userDisconnected(state, action) {
+        userDisconnected(state) {
             state.token = '';
             localStorage.removeItem(localStorageTokenName);
+        },
+
+        refreshUserToken(state, action) {
+            axios.post(`${apiAddress}/updateToken`, {token})
+                .then(response => response.data)
+                .then(data =>{
+                    if(data.status)
+                        localStorage.setItem(localStorageTokenName, data.newToken);
+                })
+                .catch(console.error);
         }
     },
 });
 
-export const {userConnected, userDisconnected} = courseSlice.actions;
-export const accountReducer = courseSlice.reducer;
+export const {userConnected, userDisconnected, refreshUserToken} = accountSlice.actions;
+export const accountReducer = accountSlice.reducer;
