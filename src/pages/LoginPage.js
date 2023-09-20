@@ -19,6 +19,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import {useState} from "react";
 import axios from "axios";
 import {apiAddress} from '../config'
+import {Account} from "../context/AccountContext";
 
 import { useDispatch } from 'react-redux';
 import { userConnected } from '../store/slices/accountSlice';
@@ -28,6 +29,10 @@ import { userConnected } from '../store/slices/accountSlice';
 const defaultTheme = createTheme();
 
 export default function LoginPage() {
+
+    const token = Account().accountProps.token.active;
+    if ( token )
+        window.location.href = '/account';
 
     const dispatch = useDispatch();
     const [rememberMe, setRememberMe] = useState(false);
