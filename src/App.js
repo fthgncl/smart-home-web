@@ -4,12 +4,15 @@ import AppBar from "./components/AppBar";
 import SignUpPage from './pages/SignUpPage';
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
+import AccountPage from "./pages/AccountPage";
 
-import { Account } from "./context/AccountContext";
+import { useDispatch } from 'react-redux';
+import { refreshUserToken } from './store/slices/accountSlice';
 
 function App() {
 
-    console.log(Account());
+    const dispatch = useDispatch();
+    dispatch(refreshUserToken());
 
     return (
         <div className="App">
@@ -18,6 +21,7 @@ function App() {
                 <Route path="/" element={<HomePage/>} />
                 <Route path="/signup" element={<SignUpPage />} />
                 <Route path="/login" element={<LoginPage/>} />
+                <Route path="/account" element={<AccountPage/>} />
             </Routes>
         </div>
     );
