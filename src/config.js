@@ -1,6 +1,2 @@
-const systemConfigs = {
-  apiAddress: "http://localhost:3000"
-}
-
-export const apiAddress = systemConfigs.apiAddress;
-export default systemConfigs;
+export const apiAddress = "http://localhost:3010";
+export const localStorageTokenName = "SHtokencode";

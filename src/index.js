@@ -5,7 +5,7 @@ import {Provider} from 'react-redux';
 import {store} from './store/store';
 import { AccountProvider } from './context/AccountContext';
 
-import './index.css';
+import './css/index.css';
 import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
