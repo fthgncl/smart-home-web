@@ -47,7 +47,7 @@ export default function MessageVerifyAccount({email,setMailSendedStatus}) {
                 </IconButton>
                 <DialogContent dividers>
                     <Typography gutterBottom>
-                        <b>{email}</b> adresine gönderilen mailden hesabınızı onaylayınız.
+                        <b>{email}</b> adresine gönderilen mailden hesabını onaylayabilirsin.
                     </Typography>
                 </DialogContent>
                 <DialogActions>

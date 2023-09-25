@@ -238,7 +238,7 @@ export default function SignUp() {
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
                                     <Link href="/login" variant="body2">
-                                        Zaten hesabınız var mı? Giriş Yapın. {/*TODO : Bu linki yönlendirmeyi unutma.*/}
+                                        Zaten hesabınız var mı? Giriş Yapın.
                                     </Link>
                                 </Grid>
                             </Grid>
