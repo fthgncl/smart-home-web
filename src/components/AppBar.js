@@ -83,6 +83,7 @@ export default function MenuAppBar() {
                                 onClose={handleClose}
                             >
                                 <MenuItem onClick={()=> window.location.href = '/account'}>Hesap</MenuItem>
+                                <MenuItem onClick={()=> window.location.href = '/dashboard'}>Kontrol Paneli</MenuItem>
                                 <MenuItem onClick={handleLogOut}>Oturumu Kapat</MenuItem>
                             </Menu>
                         </div>

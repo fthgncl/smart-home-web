@@ -6,6 +6,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import AccountPage from "./pages/AccountPage";
 import ConfirmEmail from "./pages/ConfirmEmail";
+import Dashboard from "./pages/DashboardPage";
 
 import { useDispatch } from 'react-redux';
 import { refreshUserToken } from './store/slices/accountSlice';
@@ -24,6 +25,7 @@ function App() {
                 <Route path="/login" element={<LoginPage/>} />
                 <Route path="/account" element={<AccountPage/>} />
                 <Route path="/confirm-email/:userId" element={<ConfirmEmail/>} />
+                <Route path="/dashboard" element={<Dashboard/>} />
             </Routes>
         </div>
     );
