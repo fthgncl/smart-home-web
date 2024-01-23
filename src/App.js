@@ -7,6 +7,7 @@ import LoginPage from "./pages/LoginPage";
 import AccountPage from "./pages/AccountPage";
 import ConfirmEmail from "./pages/ConfirmEmail";
 import Dashboard from "./pages/DashboardPage";
+import AdminDashboard from "./pages/AdminDashboard";
 
 import { useDispatch } from 'react-redux';
 import { refreshUserToken } from './store/slices/accountSlice';
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/account" element={<AccountPage/>} />
                 <Route path="/confirm-email/:userId" element={<ConfirmEmail/>} />
                 <Route path="/dashboard" element={<Dashboard/>} />
+                <Route path="/admin-dashboard" element={<AdminDashboard/>} />
             </Routes>
         </div>
     );

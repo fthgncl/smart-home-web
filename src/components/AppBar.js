@@ -1,10 +1,9 @@
-import * as React from 'react';
+import {useState} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
@@ -23,7 +22,7 @@ export default function MenuAppBar() {
         dispatch(userDisconnected());
     }
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -34,18 +33,9 @@ export default function MenuAppBar() {
     };
 
     return (
-        <Box sx={{flexGrow: 1}}>
+        <Box id='AppBar' sx={{flexGrow: 1}}>
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{mr: 2}}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
                     <Typography onClick={()=>window.location.href = '/'}  variant="h6" component="div" sx={{flexGrow: 1, cursor: 'pointer'}}>
                         Smart Home
                     </Typography>
