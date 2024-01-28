@@ -17,6 +17,7 @@ export default function MenuAppBar() {
     const dispatch = useDispatch();
     const token = Account().accountProps.token;
     const auth = token.active;
+    const roles = token?.data?.roles === undefined ? [] : token.data.roles;
 
     const handleLogOut = () => {
         dispatch(userDisconnected());
@@ -36,7 +37,8 @@ export default function MenuAppBar() {
         <Box id='AppBar' sx={{flexGrow: 1}}>
             <AppBar position="static">
                 <Toolbar>
-                    <Typography onClick={()=>window.location.href = '/'}  variant="h6" component="div" sx={{flexGrow: 1, cursor: 'pointer'}}>
+                    <Typography onClick={() => window.location.href = '/'} variant="h6" component="div"
+                                sx={{flexGrow: 1, cursor: 'pointer'}}>
                         Smart Home
                     </Typography>
                     {auth ? (
@@ -72,14 +74,18 @@ export default function MenuAppBar() {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={()=> window.location.href = '/account'}>Hesap</MenuItem>
-                                <MenuItem onClick={()=> window.location.href = '/dashboard'}>Kontrol Paneli</MenuItem>
+                                <MenuItem onClick={() => window.location.href = '/account'}>Hesap</MenuItem>
+                                {roles.length !== 0 && (
+                                    <MenuItem onClick={() => window.location.href = '/admin-dashboard'}>Yönetici
+                                        Paneli</MenuItem>)}
+                                <MenuItem onClick={() => window.location.href = '/dashboard'}>Kontrol Paneli</MenuItem>
                                 <MenuItem onClick={handleLogOut}>Oturumu Kapat</MenuItem>
                             </Menu>
                         </div>
                     ) : (
                         <div>
-                            <IconButton onClick={()=>window.location.href = '/login'} sx={{borderRadius: 3}} size="large" color="inherit">
+                            <IconButton onClick={() => window.location.href = '/login'} sx={{borderRadius: 3}}
+                                        size="large" color="inherit">
                                 <Typography sx={{flexGrow: 2, marginRight: 2, fontSize: 15}}>
                                     Giriş Yap
                                 </Typography>

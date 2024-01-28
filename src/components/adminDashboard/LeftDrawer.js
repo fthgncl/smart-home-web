@@ -13,11 +13,14 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import {Account} from "../../context/AccountContext";
+import userRoleIncludes from "../../helper/userRoleIncludes";
 
 const drawerWidth = 240;
 const drawerItems = [
-    {text:"Kullanıcılar" , page:"UserManagement" , icon:<PeopleAltIcon/>}
+    {text:"Kullanıcılar" , page:"UserManagement" , icon:<PeopleAltIcon/> , roles:["sys_admin","admin","user_editor"]}
 ]
+
 
 const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -68,6 +71,14 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 
 export default function LeftDrawer({setMainBoxMarginLeft,handleChangePage}) {
 
+
+    const token = Account().accountProps.token;
+    const auth = token.active;
+    const userRoles = token?.data?.roles === undefined ? [] : token.data.roles;
+
+    if ( !auth )
+        window.location.href = '/login';
+    
     const theme = useTheme();
     const [open, setOpen] = useState(false);
 
@@ -113,7 +124,7 @@ export default function LeftDrawer({setMainBoxMarginLeft,handleChangePage}) {
                 </DrawerHeader>
                 <Divider/>
                 <List>
-                    {drawerItems.map((item, index) => (
+                    {drawerItems.map((item) => userRoleIncludes(userRoles, item.roles ) && (
                         <ListItem key={item.text} disablePadding sx={{display: 'block'}}>
                             <ListItemButton
                                 onClick={() => handleChangePage(item.page)}
