@@ -22,9 +22,15 @@ import axios from "axios";
 import {apiAddress} from '../config'
 import MessageVerifyAccount from "../components/MessageVerifyAccount";
 import confrimHTML from '../ConfirmEmail';
+import {Account} from "../context/AccountContext";
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+
+    const token = Account().accountProps.token;
+    const auth = token.active;
+    if ( auth )
+        window.location.href = '/account';
 
     const [showPassword, setShowPassword] = useState(false);
     const [mailSendedStatus, setMailSendedStatus] = useState(false);
