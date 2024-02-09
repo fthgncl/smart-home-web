@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
+import ThemeSwitcher from './ThemeSwitcher';
 
 import {Account} from "../context/AccountContext";
 import {useDispatch} from 'react-redux';
@@ -35,12 +36,13 @@ export default function MenuAppBar() {
 
     return (
         <Box id='AppBar' sx={{flexGrow: 1}}>
-            <AppBar position="static">
+            <AppBar position="static" sx={{borderBottomLeftRadius:30 , borderBottomRightRadius:30}}>
                 <Toolbar>
                     <Typography onClick={() => window.location.href = '/'} variant="h6" component="div"
                                 sx={{flexGrow: 1, cursor: 'pointer'}}>
                         Smart Home
                     </Typography>
+                    <ThemeSwitcher/>
                     {auth ? (
                         <div>
 

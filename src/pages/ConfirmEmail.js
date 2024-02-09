@@ -37,16 +37,16 @@ export default function ConfirmEmail() {
             {loading&&(<CircularProgress color="info" size={80}/>)}
             {!loading && (confirmStatus ? (
                 <>
-                    <VerifiedIcon color='success' style={{fontSize: '200px'}}/>
-                    <Typography color='green' variant="h3" gutterBottom>
+                    <VerifiedIcon sx={{color:'success.light' ,fontSize:200}}/>
+                    <Typography color='success.light' variant="h3" gutterBottom>
                         Hesabınız onayladı
                     </Typography>
                 </>
 
             ) : (
                 <>
-                    <ErrorIcon color='error' style={{fontSize: '200px', marginBottom: '20px'}}/>
-                    <Typography color='#D12F2FFF' variant="h3" gutterBottom>
+                    <ErrorIcon sx={{color:'error.main' ,fontSize:200}}/>
+                    <Typography sx={{color:'error.main'}} variant="h3" gutterBottom>
                         Hesabınız onaylanamadı !
                     </Typography>
                     <Link href="/signup" variant="h5">
