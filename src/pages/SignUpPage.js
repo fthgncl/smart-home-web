@@ -25,6 +25,7 @@ import {Account} from "../context/AccountContext";
 
 export default function SignUp() {
 
+    const [emailConfirmationTimeoutMinutes,setEmailConfirmationTimeoutMinutes] = useState();
     const token = Account().accountProps.token;
     const auth = token.active;
     if (auth)
@@ -39,6 +40,7 @@ export default function SignUp() {
         await axios.post(`${apiAddress}/sign-up`, values)
             .then(response => response.data)
             .then(data => {
+                setEmailConfirmationTimeoutMinutes(data.emailConfirmationTimeoutMinutes);
 
                 const trueInformation = checkApiErrors(data, actions);
                 if (!trueInformation)
@@ -55,7 +57,7 @@ export default function SignUp() {
     }
 
     const {values, touched, handleBlur, errors, isSubmitting, handleChange, handleSubmit, setErrors} = useFormik({
-        initialValues: {
+        initialValues: { // TODO: Başlangıç değerlerini sil
             name: 'fatih',
             surname: 'gencal',
             email: 'gencal.fatih61@gmail.com',
@@ -86,7 +88,7 @@ export default function SignUp() {
     }
 
     return (
-        <>{mailSendedStatus && <MessageVerifyAccount setMailSendedStatus={setMailSendedStatus} email={values.email}/>}
+        <>{mailSendedStatus && <MessageVerifyAccount setMailSendedStatus={setMailSendedStatus} email={values.email} emailConfirmationTimeoutMinutes={emailConfirmationTimeoutMinutes} />}
             <Container component="main" maxWidth="xs">
                 <CssBaseline/>
                 <Box

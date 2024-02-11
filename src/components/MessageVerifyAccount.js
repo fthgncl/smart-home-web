@@ -17,8 +17,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     },
 }));
 
-export default function MessageVerifyAccount({email,setMailSendedStatus}) {
-
+export default function MessageVerifyAccount({email,setMailSendedStatus,emailConfirmationTimeoutMinutes}) {
     const handleClose = () => {
         setMailSendedStatus(false)
     };
@@ -47,7 +46,7 @@ export default function MessageVerifyAccount({email,setMailSendedStatus}) {
                 </IconButton>
                 <DialogContent dividers>
                     <Typography gutterBottom>
-                        <b>{email}</b> adresine gönderilen mailden hesabını onaylayabilirsin.
+                        Üyeliğinizin tamamlanabilmesi için <b>{email}</b> adresine gönderilen e-posta üzerinden hesabınızı <b>{emailConfirmationTimeoutMinutes}</b> dakika içinde onaylayınız.
                     </Typography>
                 </DialogContent>
                 <DialogActions>
