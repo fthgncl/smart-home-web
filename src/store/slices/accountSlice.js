@@ -9,6 +9,7 @@ const accountSlice = createSlice({
     name: 'account',
     initialState: {
         token: {
+            code: token,
             data: decodeToken(token),
             active: !isExpired(token)
         }

@@ -1,7 +1,7 @@
 import {useState} from "react";
 import Box from "@mui/material/Box";
 import LeftDrawer from "../components/adminDashboard/LeftDrawer";
-import UserManagement from "../components/adminDashboard/UserManagement";
+import UserManagement from "../components/adminDashboard/userManagement/UserManagement";
 
 
 export default function AdminDashboard() {
