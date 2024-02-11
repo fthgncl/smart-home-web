@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react';
 import { useSelector } from "react-redux";
 
-const AccountContext = createContext();
+const AccountContext = createContext(undefined);
 
 export const AccountProvider = ({ children }) => {
 

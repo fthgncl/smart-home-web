@@ -117,7 +117,7 @@ export default function LoginPage() {
                             </InputAdornment>
                         }}
                     />
-                    <Typography sx={{textAlign: 'center', color: 'red'}} variant='body2'>{errorMessage}</Typography>
+                    <Typography sx={{textAlign: 'center', color: 'error.main'}} variant='body2'>{errorMessage}</Typography>
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" checked={rememberMe}
                                            onChange={handleRememberMeChange}/>}
