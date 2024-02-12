@@ -6,6 +6,7 @@ import getUsersData from '../../../helper/getUsers';
 import {useState} from 'react';
 
 export default function UserManagement() {
+    const [isLoading,setIsLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [haveFilter, setHaveFilter] = useState(false);
@@ -22,15 +23,13 @@ export default function UserManagement() {
         }));
     };
 
-    if (users.length === 0) {
+    if (isLoading) {
         getUsersData("name surname phone email permissions mailConfirmation")
             .then(userData => {
                 setUsers(userData);
+                setIsLoading(false);
             })
-            .catch(error => {
-                console.error('Error ' +
-                    'fetching users:', error);
-            });
+            .catch(error => console.error('Error | fetching users :', error));
     }
 
     return (
@@ -41,8 +40,8 @@ export default function UserManagement() {
                 </Typography>
                 <SearchBar onChange={onSearchInputChange} sx={{width: '100%'}}/>
             </Box>
-
-            <UsersList users={haveFilter ? filteredUsers : users}/>
+            <UsersList users={haveFilter ? filteredUsers : users} isLoading={isLoading}/>
         </Box>
     );
 }
+

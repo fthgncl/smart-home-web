@@ -9,8 +9,21 @@ import Paper from '@mui/material/Paper';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import DoneRoundedIcon from '@mui/icons-material/DoneRounded';
 import TimerRoundedIcon from '@mui/icons-material/TimerRounded';
+import Typography from '@mui/material/Typography';
+import Box from "@mui/material/Box";
+import Skeleton from '@mui/material/Skeleton';
 
-export default function UsersList({users}) {
+const loadingAnimation = () => {
+    const skeletons = [];
+    for (let i = 0; i < 10; i++) {
+        skeletons.push(
+            <Typography key={i} variant="h3"><Skeleton/></Typography>
+        );
+    }
+    return (<Box sx={{width: 1}}> {skeletons} </Box>);
+}
+
+export default function UsersList({users, isLoading}) {
 
     const [sortBy, setSortBy] = useState('name');      // Hangi stüna göre sıralama yapılacağı , başlangıçta 'name' belirlendi
     const [sortOrder, setSortOrder] = useState('asc'); // Sıralama yöntemi | asc(artan) - dsc(azalan)
@@ -72,7 +85,7 @@ export default function UsersList({users}) {
                                 Yetkiler
                             </TableSortLabel>
                         </TableCell>
-                        <TableCell sx={{textAlign:'center'}}>
+                        <TableCell sx={{textAlign: 'center'}}>
                             <TableSortLabel
                                 active={sortBy === 'mailConfirmation'}
                                 direction={sortBy === 'mailConfirmation' ? sortOrder : 'asc'}
@@ -84,9 +97,10 @@ export default function UsersList({users}) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {sortedUsers.map((user,index) => (
+                    {isLoading ? (
+                        <TableCell colSpan={100}>{loadingAnimation()}</TableCell>) : sortedUsers.map((user, index) => (
                         <TableRow
-                            hover = {user.mailConfirmation}
+                            hover={user.mailConfirmation}
                             key={index}
                             sx={{'&:last-child td, &:last-child th': {border: 0}}}
                         >
@@ -96,7 +110,9 @@ export default function UsersList({users}) {
                             <TableCell>{user.phone}</TableCell>
                             <TableCell>{user.email}</TableCell>
                             <TableCell>{user.permissions}</TableCell>
-                            <TableCell>{user.mailConfirmation?<DoneRoundedIcon sx={{display:'flex',margin:'auto'}} color="primary" />:<TimerRoundedIcon sx={{display:'flex',margin:'auto'}} color="error" />}</TableCell>
+                            <TableCell>{user.mailConfirmation ?
+                                <DoneRoundedIcon sx={{display: 'flex', margin: 'auto'}} color="primary"/> :
+                                <TimerRoundedIcon sx={{display: 'flex', margin: 'auto'}} color="error"/>}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
