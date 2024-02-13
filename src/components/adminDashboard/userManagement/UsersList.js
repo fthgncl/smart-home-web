@@ -98,7 +98,7 @@ export default function UsersList({users, isLoading}) {
                 </TableHead>
                 <TableBody>
                     {isLoading ? (
-                        <TableCell colSpan={100}>{loadingAnimation()}</TableCell>) : sortedUsers.map((user, index) => (
+                        <TableRow><TableCell colSpan={100}>{loadingAnimation()}</TableCell></TableRow>) : sortedUsers.map((user, index) => (
                         <TableRow
                             hover={user.mailConfirmation}
                             key={index}
