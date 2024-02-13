@@ -1,4 +1,4 @@
-import {useState, useMemo} from 'react';
+import {useState, useMemo, useEffect} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -12,6 +12,8 @@ import TimerRoundedIcon from '@mui/icons-material/TimerRounded';
 import Typography from '@mui/material/Typography';
 import Box from "@mui/material/Box";
 import Skeleton from '@mui/material/Skeleton';
+import getUsersData from '../../../helper/getUsers';
+import EditUser from './EditUser';
 
 const loadingAnimation = () => {
     const skeletons = [];
@@ -23,10 +25,35 @@ const loadingAnimation = () => {
     return (<Box sx={{width: 1}}> {skeletons} </Box>);
 }
 
-export default function UsersList({users, isLoading}) {
+export default function UsersList({filter}) {
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [users, setUsers] = useState([]);
+    const [filteredUsers, setFilteredUsers] = useState([]);
+    const [isOpenUserEditDrawer,setIsOpenUserEditDrawer] = useState(false);
+
+    useEffect(() => {
+        setFilteredUsers(users.filter(user => {
+            for (const property of Object.values(user)) {
+                if (typeof property === 'string' && property.toLowerCase().includes(filter.toLowerCase())) {
+                    return true;
+                }
+            }
+            return false;
+        }));
+    }, [filter, users]);
 
     const [sortBy, setSortBy] = useState('name');      // Hangi stüna göre sıralama yapılacağı , başlangıçta 'name' belirlendi
     const [sortOrder, setSortOrder] = useState('asc'); // Sıralama yöntemi | asc(artan) - dsc(azalan)
+
+    const sortedUsers = useMemo(() => {
+        const comparator = (a, b) => {
+            if (a[sortBy] < b[sortBy]) return -1;
+            if (a[sortBy] > b[sortBy]) return 1;
+            return 0;
+        };
+        return filteredUsers.slice().sort((a, b) => (sortOrder === 'asc' ? comparator(a, b) : -comparator(a, b)));
+    }, [filteredUsers, sortBy, sortOrder]);
 
     const handleSort = (property) => {  // Sıralama yöntemini değiştirir
         const isAsc = sortBy === property && sortOrder === 'asc';
@@ -34,18 +61,22 @@ export default function UsersList({users, isLoading}) {
         setSortOrder(isAsc ? 'desc' : 'asc');
     };
 
-    const sortedUsers = useMemo(() => {
-        if (!sortBy) return users;
-        const comparator = (a, b) => {
-            if (a[sortBy] < b[sortBy]) return -1;
-            if (a[sortBy] > b[sortBy]) return 1;
-            return 0;
-        };
-        return users.slice().sort((a, b) => (sortOrder === 'asc' ? comparator(a, b) : -comparator(a, b)));
-    }, [sortBy, sortOrder, users]);
+
+    if (isLoading) {
+        setIsLoading(false);
+        getUsersData("id name surname phone email permissions mailConfirmation")
+            .then(userData => setUsers(userData))
+            .catch(error => console.error('Error | fetching users :', error));
+    }
+
+    const handleCloseUserEditDrawer = () => {
+        setIsOpenUserEditDrawer(false);
+    }
+
 
     return (
         <TableContainer component={Paper}>
+            <EditUser isOpen={isOpenUserEditDrawer} handleClose={handleCloseUserEditDrawer}/>
             <Table sx={{minWidth: 650}} aria-label="simple table">
                 <TableHead>
                     <TableRow>
@@ -98,11 +129,13 @@ export default function UsersList({users, isLoading}) {
                 </TableHead>
                 <TableBody>
                     {isLoading ? (
-                        <TableRow><TableCell colSpan={100}>{loadingAnimation()}</TableCell></TableRow>) : sortedUsers.map((user, index) => (
+                        <TableRow><TableCell
+                            colSpan={100}>{loadingAnimation()}</TableCell></TableRow>) : sortedUsers.map(user => (
                         <TableRow
                             hover={user.mailConfirmation}
-                            key={index}
+                            key={user._id}
                             sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                            onClick={()=>setIsOpenUserEditDrawer(true)}
                         >
                             <TableCell component="th" scope="row">
                                 {`${user.name} ${user.surname}`}
