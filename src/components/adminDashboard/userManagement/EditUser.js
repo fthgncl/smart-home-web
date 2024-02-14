@@ -1,7 +1,10 @@
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Typography from "@mui/material/Typography";
 
-export default function EditUser({isOpen,handleClose}) {
+export default function EditUser({user,isOpen,handleClose}) {
+
+    if ( !isOpen )
+        return;
 
     const handleOpen = () => {
 
@@ -16,7 +19,7 @@ export default function EditUser({isOpen,handleClose}) {
         >
 
             <Typography variant="h4">
-                (Kullanıcı Adı)
+                {user.name} {user.surname}
             </Typography>
 
         </SwipeableDrawer>

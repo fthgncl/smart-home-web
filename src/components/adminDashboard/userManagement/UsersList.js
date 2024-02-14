@@ -30,7 +30,8 @@ export default function UsersList({filter}) {
     const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
-    const [isOpenUserEditDrawer,setIsOpenUserEditDrawer] = useState(false);
+    const [isOpenUserEditDrawer, setIsOpenUserEditDrawer] = useState(false);
+    const [selectedUser, setSelectedUser] = useState();
 
     useEffect(() => {
         setFilteredUsers(users.filter(user => {
@@ -73,10 +74,15 @@ export default function UsersList({filter}) {
         setIsOpenUserEditDrawer(false);
     }
 
+    const handleOpenUserEditDrawer = (user) => {
+        setIsOpenUserEditDrawer(true);
+        setSelectedUser(user);
+    }
+
 
     return (
         <TableContainer component={Paper}>
-            <EditUser isOpen={isOpenUserEditDrawer} handleClose={handleCloseUserEditDrawer}/>
+            <EditUser user={selectedUser} isOpen={isOpenUserEditDrawer} handleClose={handleCloseUserEditDrawer}/>
             <Table sx={{minWidth: 650}} aria-label="simple table">
                 <TableHead>
                     <TableRow>
@@ -135,7 +141,7 @@ export default function UsersList({filter}) {
                             hover={user.mailConfirmation}
                             key={user._id}
                             sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                            onClick={()=>setIsOpenUserEditDrawer(true)}
+                            onClick={() => handleOpenUserEditDrawer(user)}
                         >
                             <TableCell component="th" scope="row">
                                 {`${user.name} ${user.surname}`}
